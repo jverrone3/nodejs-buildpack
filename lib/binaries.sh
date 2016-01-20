@@ -28,13 +28,12 @@ install_nodejs() {
 
 install_oracle() {
   echo "Downloading the Oracle Instant Client BASIC and SDK zip..."
-  mkdir /opt/oracle
-  cd /opt/oracle
   local download_url="http://download.oracle.com/otn/linux/instantclient/121020/instantclient-basic-linux.x64-12.1.0.2.0.zip"
-  curl "$download_url" --silent --fail -o /opt/oracle || (echo "Unabled to download Oracle BASIC zip." && false)
+  curl "$download_url" --silent --fail -o /tmp/oracle || (echo "Unabled to download Oracle BASIC zip." && false)
   local download_url="http://download.oracle.com/otn/linux/instantclient/121020/instantclient-sdk-linux.x64-12.1.0.2.0.zip"
-  curl "$download_url" --silent --fail -o /opt/oracle || (echo "Unabled to download Oracle SDK zip." && false)
+  curl "$download_url" --silent --fail -o /tmp/oracle || (echo "Unabled to download Oracle SDK zip." && false)
 
+  cd /tmp/oracle
   echo "Installing the Oracle Instant Client ..."
   unzip instantclient-basic-linux.x64-12.1.0.2.0.zip
   unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip
@@ -43,7 +42,9 @@ install_oracle() {
   ln -s libclntsh.so.12.1 libclntsh.so
 
   echo "Set the link path..."
-  export LD_LIBRARY_PATH=/opt/oracle/instantclient:$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH=/tmp/oracle/instantclient:$LD_LIBRARY_PATH
+  export OCI_LIB_DIR=/tmp/oracle/instantclient_12_1
+  export OCI_INC_DIR=/tmp/oracle/instantclient_12_1/sdk/include
 }
 
 install_iojs() {
