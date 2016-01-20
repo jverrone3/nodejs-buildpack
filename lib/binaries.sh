@@ -26,15 +26,24 @@ install_nodejs() {
   chmod +x $dir/bin/*
 }
 
-install_oraclerpm() {
-  echo "Downloading and installing oracle BASIC rpm..."
-  local download_url="http://download.oracle.com/otn/linux/instantclient/121020/oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm"
-  curl "$download_url" --silent --fail -o /tmp/oracle || (echo "Unabled to download Oracle BASIC rpm." && false)
-  rpm -ivh /tmp/oracle/oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm
-  echo "Downloading and installing oracle SDK rpm..."
-  local download_url="http://download.oracle.com/otn/linux/instantclient/121020/oracle-instantclient12.1-devel-12.1.0.2.0-1.x86_64.rpm"
-  curl "$download_url" --silent --fail -o /tmp/oracle || (echo "Unabled to download Oracle SDK rpm." && false)
-  rpm -ivh /tmp/oracle/oracle-instantclient12.1-devel-12.1.0.2.0-1.x86_64.rpm
+install_oracle() {
+  echo "Downloading the Oracle Instant Client BASIC and SDK zip..."
+  mkdir /opt/oracle
+  cd /opt/oracle
+  local download_url="http://download.oracle.com/otn/linux/instantclient/121020/instantclient-basic-linux.x64-12.1.0.2.0.zip"
+  curl "$download_url" --silent --fail -o /tmp/oracle || (echo "Unabled to download Oracle BASIC zip." && false)
+  local download_url="http://download.oracle.com/otn/linux/instantclient/121020/instantclient-sdk-linux.x64-12.1.0.2.0.zip"
+  curl "$download_url" --silent --fail -o /tmp/oracle || (echo "Unabled to download Oracle SDK zip." && false)
+
+  echo "Installing the Oracle Instant Client ..."
+  unzip instantclient-basic-linux.x64-12.1.0.2.0.zip
+  unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip
+  mv instantclient_12_1 instantclient
+  cd instantclient
+  ln -s libclntsh.so.12.1 libclntsh.so
+
+  echo "Set the link path..."
+  export LD_LIBRARY_PATH=/opt/oracle/instantclient:$LD_LIBRARY_PATH
 }
 
 install_iojs() {
