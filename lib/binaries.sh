@@ -28,13 +28,12 @@ install_nodejs() {
 
 install_oracle() {
   echo "Downloading the Oracle Instant Client BASIC and SDK zip..."
-  mkdir /opt/oracle
-  cd /opt/oracle
   local download_url="http://download.oracle.com/otn/linux/instantclient/121020/instantclient-basic-linux.x64-12.1.0.2.0.zip"
-  curl "$download_url" --silent --fail -o /tmp/oracle || (echo "Unabled to download Oracle BASIC zip." && false)
+  curl "$download_url" --silent --fail -o /opt/oracle || (echo "Unabled to download Oracle BASIC zip." && false)
   local download_url="http://download.oracle.com/otn/linux/instantclient/121020/instantclient-sdk-linux.x64-12.1.0.2.0.zip"
-  curl "$download_url" --silent --fail -o /tmp/oracle || (echo "Unabled to download Oracle SDK zip." && false)
+  curl "$download_url" --silent --fail -o /opt/oracle || (echo "Unabled to download Oracle SDK zip." && false)
 
+  cd /opt/oracle
   echo "Installing the Oracle Instant Client ..."
   unzip instantclient-basic-linux.x64-12.1.0.2.0.zip
   unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip
