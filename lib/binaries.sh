@@ -26,6 +26,17 @@ install_nodejs() {
   chmod +x $dir/bin/*
 }
 
+install_oraclerpm() {
+  echo "Downloading and installing oracle BASIC rpm..."
+  local download_url="http://download.oracle.com/otn/linux/instantclient/121020/oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm"
+  curl "$download_url" --silent --fail -o /tmp/oracle || (echo "Unabled to download Oracle BASIC rpm." && false)
+  rpm -ivh /tmp/oracle/oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm
+  echo "Downloading and installing oracle SDK rpm..."
+  local download_url="http://download.oracle.com/otn/linux/instantclient/121020/oracle-instantclient12.1-devel-12.1.0.2.0-1.x86_64.rpm"
+  curl "$download_url" --silent --fail -o /tmp/oracle || (echo "Unabled to download Oracle SDK rpm." && false)
+  rpm -ivh /tmp/oracle/oracle-instantclient12.1-devel-12.1.0.2.0-1.x86_64.rpm
+}
+
 install_iojs() {
   local version="$1"
   local dir="$2"
