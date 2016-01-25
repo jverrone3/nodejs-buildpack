@@ -41,8 +41,7 @@ install_oracle() {
   echo "mkdir instantclientbasic..."
   mkdir -p $dir/instantclientbasic
 
-  mv /tmp/instantclientbasic/* $dir/instantclientbasic
-  mv /tmp/instantclientsdk/* $dir/instantclientbasic
+  mv /tmp/instantclient_12_1/* $dir/instantclientbasic
   
   echo "ln -s libclntsh.sh"
   ln -s $dir/instantclientbasic/libclntsh.so.12.1 $dir/instantclientbasic/libclntsh.so
