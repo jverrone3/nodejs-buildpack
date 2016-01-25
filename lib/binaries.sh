@@ -34,14 +34,17 @@ install_oracle() {
   curl "$download_url" --silent --fail -o /tmp/instantclientbasic.zip || (echo "Unabled to download Oracle BASIC zip." && false)
   local download_url="http://oracledb-node.apps-np.homedepot.com/instantclient-sdk-linux.x64-12.1.0.2.0.zip"
   curl "$download_url" --silent --fail -o /tmp/instantclientsdk.zip || (echo "Unabled to download Oracle SDK zip." && false)
-  echo "Installing the Oracle Instant Client ..."
+  echo "Installing the Oracle Instant Client Basic..."
   unzip /tmp/instantclientbasic.zip
+  echo "Installing the Oracle Instant Client SDK..."
   unzip /tmp/instantclientsdk.zip
+  echo "mkdir instantclientbasic..."
   mkdir -p $dir/instantclientbasic
 
   mv /tmp/instantclientbasic/* $dir/instantclientbasic
   mv /tmp/instantclientsdk/* $dir/instantclientbasic
-
+  
+  echo "ln -s libclntsh.sh"
   ln -s $dir/instantclientbasic/libclntsh.so.12.1 $dir/instantclientbasic/libclntsh.so
 
   echo "Set the link path..."
