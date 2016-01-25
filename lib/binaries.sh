@@ -27,24 +27,27 @@ install_nodejs() {
 }
 
 install_oracle() {
+  local dir="$1"
+  
   echo "Downloading the Oracle Instant Client BASIC and SDK zip..."
-  local download_url="https://github.com/jverrone3/nodejs-buildpack/blob/master/instantclient-basic-linux.x64-12.1.0.2.0.zip"
-  curl "$download_url" --silent --fail -LOk || (echo "Unabled to download Oracle BASIC zip." && false)
-  local download_url="https://github.com/jverrone3/nodejs-buildpack/blob/master/instantclient-sdk-linux.x64-12.1.0.2.0.zip"
-  curl "$download_url" --silent --fail -LOk || (echo "Unabled to download Oracle SDK zip." && false)
-
+  local download_url="http://oracledb-node.apps-np.homedepot.com/instantclient-basic-linux.x64-12.1.0.2.0.zip"
+  curl "$download_url" --silent --fail -o /tmp/instantclientbasic.zip || (echo "Unabled to download Oracle BASIC zip." && false)
+  local download_url="http://oracledb-node.apps-np.homedepot.com/instantclient-sdk-linux.x64-12.1.0.2.0.zip"
+  curl "$download_url" --silent --fail -o /tmp/instantclientsdk.zip || (echo "Unabled to download Oracle SDK zip." && false)
   echo "Installing the Oracle Instant Client ..."
-  unzip instantclient-basic-linux.x64-12.1.0.2.0.zip
-  unzip instantclient-sdk-linux.x64-12.1.0.2.0.zip
-  mv instantclient_12_1 instantclient
-  cd instantclient
-  ln -s libclntsh.so.12.1 libclntsh.so
-  cd ../
+  unzip /tmp/instantclientbasic.zip
+  unzip /tmp/instantclientsdk.zip
+  mkdir -p $dir/instantclientbasic
+
+  mv /tmp/instantclientbasic/* $dir/instantclientbasic
+  mv /tmp/instantclientsdk/* $dir/instantclientbasic
+
+  ln -s $dir/instantclientbasic/libclntsh.so.12.1 $dir/instantclientbasic/libclntsh.so
 
   echo "Set the link path..."
-  export LD_LIBRARY_PATH=instantclient:$LD_LIBRARY_PATH
-  export OCI_LIB_DIR=instantclient_12_1
-  export OCI_INC_DIR=instantclient_12_1/sdk/include
+  export LD_LIBRARY_PATH=$dir/instantclientbasic:$LD_LIBRARY_PATH
+  export OCI_LIB_DIR=$dir/instantclientbasic
+  export OCI_INC_DIR=$dir/instantclientbasic/sdk/include
 }
 
 install_iojs() {
