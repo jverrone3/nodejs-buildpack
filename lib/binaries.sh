@@ -37,7 +37,7 @@ install_oracle() {
   echo "Installing the Oracle Instant Client Basic..."
   unzip /tmp/instantclientbasic.zip
   echo "Installing the Oracle Instant Client SDK..."
-  unzip /tmp/instantclientsdk.zip
+  unzip -o /tmp/instantclientsdk.zip
   echo "mkdir instantclientbasic..."
   mkdir -p $dir/instantclientbasic
 
